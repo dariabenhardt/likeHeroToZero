@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-@Table(name = "co2_record")
+@Table(name = "co2_data")
 public class Co2Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,14 +15,14 @@ public class Co2Record {
 
     private String country;
     private int year;
-    private double emission;
+    private double co2;
 
     public Co2Record() {}
 
-    public Co2Record(String country, int year, double emission) {
+    public Co2Record(String country, int year, double co2) {
         this.country = country;
         this.year = year;
-        this.emission = emission;
+        this.co2 = co2;
     }
 
     // Getter und Setter
@@ -31,6 +31,6 @@ public class Co2Record {
     public void setCountry(String country) { this.country = country; }
     public int getYear() { return year; }
     public void setYear(int year) { this.year = year; }
-    public double getEmission() { return emission; }
-    public void setEmission(double emission) { this.emission = emission; }
+    public double getEmission() { return co2; }
+    public void setEmission(double co2) { this.co2 = co2; }
 }
