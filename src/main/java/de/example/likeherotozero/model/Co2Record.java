@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 public class Co2Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String country;
     private int year;
@@ -26,7 +26,7 @@ public class Co2Record {
     }
 
     // Getter und Setter
-    public Long getId() { return id; }
+    public int getId() { return id; }
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
     public int getYear() { return year; }
