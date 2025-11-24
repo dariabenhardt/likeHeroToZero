@@ -10,10 +10,13 @@ import java.util.List;
 
 @Repository
 public interface Co2RecordRepository extends JpaRepository<Co2Record, Long>{
-    List<Co2Record> findAllByCountry(String country);
+
+    Co2Record findFirstByCountryOrderByYearDesc(String country);
 
     @Query("SELECT DISTINCT c.country FROM Co2Record c")
     List<String> findAllCountries();
 
-    Co2Record findTopByCountryOrderByYearDesc(String country);
+
+
+
 }

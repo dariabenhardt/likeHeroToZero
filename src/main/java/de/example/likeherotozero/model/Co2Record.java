@@ -2,9 +2,11 @@ package de.example.likeherotozero.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "co2_data")
-public class Co2Record {
+public class Co2Record  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

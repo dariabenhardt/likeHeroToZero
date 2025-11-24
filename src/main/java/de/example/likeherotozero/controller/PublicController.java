@@ -24,5 +24,6 @@ public class PublicController {
         model.addAttribute("co2Record", new Co2Record());
         return "index";
     }
-
 }
+
+

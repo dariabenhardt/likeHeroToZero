@@ -5,16 +5,15 @@
 <h1>Wilkommen!</h1>
 <h2>Sie befinden sich auf der Startseite von unserem Projekt "Like Zero to Hero"</h2>
 
-<div>
-<p> Möchten Sie die aktuellen Werte für ein bestimmtes Land finden?</p>
-    <form th:action="@{/co2/country}" th:object="${co2Record}" method="post">
-        <select th:field="*{country}">
-            <option value="">-- Bitte wählen --</option>
-            <option th:each="c : ${countries}" th:value="${c}" th:text="${c}"></option>
-        </select>
-        <button type="submit">Anzeigen</button>
-    </form>
-</div>
+<form th:action="@{/co2/country}" method="post">
+    <select name="country">
+        <option value="">-- Bitte wählen --</option>
+        <option th:each="c : ${countries}" th:value="${c}" th:text="${c}"></option>
+    </select>
+    <button type="submit">Anzeigen</button>
+</form>
+
+
 
 <div>
     <p>Sie sind ein registrierter Wissenschaftler und möchten die Werte eintragen oder abändern?</p>

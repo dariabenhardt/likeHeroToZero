@@ -2,19 +2,63 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>CO2 Daten für ${country}</title>
+  <title>CO2 Daten für {country}</title>
 </head>
 <body>
-<h1>CO2 Daten für <span th:text="${country}"></span></h1>
-<table>
-  <thead><tr><th>Jahr</th><th>CO2-Ausstoß</th></tr></thead>
-  <tbody>
-  <tr th:each="record : ${co2}">
-    <td th:text="${record.year}"></td>
-    <td th:text="${record.co2}"></td>
-  </tr>
-  </tbody>
-</table>
+<div class="container">
+  <a href="/" class="nav-link">← Zurück zur Startseite</a>
+
+  <h1>CO2-Datensatz Abfrage</h1>
+
+  <form th:action="@{/co2/country}" method="post">
+    <div class="form-group">
+      <label for="country">Wählen Sie ein Land:</label>
+      <select id="country" name="country" required>
+        <option value="">-- Bitte wählen --</option>
+        <option th:each="c : ${countries}"
+                th:value="${c}"
+                th:text="${c}"
+                th:selected="${c == selectedCountry}">
+        </option>
+      </select>
+    </div>
+
+    <button type="submit">Aktuellsten Datensatz abrufen</button>
+  </form>
+
+  <div th:if="${message}"
+       class="result"
+       th:classappend="${record == null} ? 'no-data' : ''">
+    <h2 th:text="${message}"></h2>
+
+    <div th:if="${record != null}" class="result-grid">
+      <div class="result-item">
+        <div class="result-label">Land</div>
+        <div class="result-value" th:text="${record.country}"></div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-label">Jahr</div>
+        <div class="result-value" th:text="${record.year}"></div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-label">CO2-Emission</div>
+        <div class="result-value co2-value" th:text="${#numbers.formatDecimal(record.co2, 1, 2)} + ' t'"></div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-label">Status</div>
+        <div>
+                        <span class="status-badge"
+                              th:classappend="${'status-' + record.status}"
+                              th:text="${record.status}">
+                        </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

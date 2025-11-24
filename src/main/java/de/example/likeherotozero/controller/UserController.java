@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/login")
@@ -60,12 +60,6 @@ public class UserController {
         return "scientist/newDataForm";
     }
 
-    @GetMapping("/scientist/edit")
-    public String editDataForm(@RequestParam String country, Model model) {
-        // Lade bestehende Daten zum Land und zeige Formular mit Bearbeitungsdaten
-        Co2Record record = Co2RecordRepository.findTopByCountryOrderByYearDesc(country);
-        model.addAttribute("co2Record", record);
-        return "scientist/editDataForm";
-    }
+
 }
 
