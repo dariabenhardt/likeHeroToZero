@@ -5,6 +5,163 @@
   <title>CO2 Daten für {country}</title>
 </head>
 <body>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  }
+  h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+  }
+  .nav-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #667eea;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  .nav-link:hover {
+    color: #764ba2;
+  }
+  .form-group {
+    margin-bottom: 25px;
+  }
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #555;
+    font-size: 1.1em;
+  }
+  select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    background-color: white;
+  }
+  select:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  }
+  button:active {
+    transform: translateY(0);
+  }
+  .result {
+    margin-top: 30px;
+    padding: 25px;
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    border-left: 5px solid #4CAF50;
+    border-radius: 8px;
+    animation: slideIn 0.5s ease-out;
+  }
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .result h2 {
+    margin-bottom: 20px;
+    color: #2e7d32;
+    font-size: 1.5em;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  .result-item {
+    padding: 15px;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .result-label {
+    font-weight: 600;
+    color: #666;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .result-value {
+    color: #333;
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+  .co2-value {
+    color: #4CAF50;
+    font-size: 1.5em;
+  }
+  .status-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .status-VERIFIED {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .status-PENDING {
+    background-color: #FF9800;
+    color: white;
+  }
+  .status-ESTIMATED {
+    background-color: #2196F3;
+    color: white;
+  }
+  .no-data {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    border-left: 5px solid #ff9800;
+  }
+  .no-data h2 {
+    color: #e65100;
+  }
+</style>
 <div class="container">
   <a href="/" class="nav-link">← Zurück zur Startseite</a>
 
