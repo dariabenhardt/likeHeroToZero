@@ -1,28 +1,22 @@
 package de.example.likeherotozero.controller;
 
 import de.example.likeherotozero.model.Users;
-import de.example.likeherotozero.repository.Co2RecordRepository;
+import de.example.likeherotozero.model.UserRole;
 import de.example.likeherotozero.repository.UserRepository;
-import de.example.likeherotozero.model.Co2Record;
 import org.springframework.stereotype.Controller;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/login")
 public class UserController {
 
     private final UserRepository userRepository;
-    private final Co2RecordRepository Co2RecordRepository;
 
-    public UserController(UserRepository userRepository, Co2RecordRepository Co2RecordRepository) {
+    public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.Co2RecordRepository = Co2RecordRepository;
     }
-
 
     @PostMapping("/login")
     public String processLogin(@RequestParam String username,
@@ -34,32 +28,24 @@ public class UserController {
             Users user = userOpt.get();
             if (user.getPassword().equals(password) && user.getEnabled()) {
                 session.setAttribute("user", user);
-                return "loggedin";
+
+                // Je nach Rolle zum passenden Dashboard weiterleiten
+                if (user.isAdmin()) {
+                    return "redirect:/admin/dashboard";
+                } else if (user.isScientist()) {
+                    return "redirect:/scientist/dashboard";
+                } else {
+                    return "redirect:/";
+                }
             }
         }
         model.addAttribute("error", "Ungültiger Benutzername oder Passwort");
-        return "index";
+        return "redirect:/?error=true";
     }
 
-    @GetMapping("/loggedin")
-    public String loggedInPage(Model model, HttpSession session) {
-        Users currentUser = (Users) session.getAttribute("user");
-        if (currentUser == null) {
-            return "redirect:/";
-        }
-        model.addAttribute("username", currentUser.getUsername());
-        return "loggedin";
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
     }
-
-
-
-    @PostMapping("/scientist/new")
-    public String createNewData(@RequestParam String country, Model model) {
-        // Weiterleitung zum Formular für neue Daten mit Vorauswahl Land
-        model.addAttribute("country", country);
-        return "scientist/newDataForm";
-    }
-
-
 }
-

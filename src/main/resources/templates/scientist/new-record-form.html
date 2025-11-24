@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuen Datensatz vorschlagen</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      color: #764ba2;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+      font-size: 1em;
+    }
+
+    .required {
+      color: #f44336;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .helper-text {
+      font-size: 0.9em;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 14px 30px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+      flex: 1;
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 25px;
+    }
+
+    .info-box-title {
+      font-weight: 600;
+      color: #1976D2;
+      margin-bottom: 8px;
+    }
+
+    .info-box-text {
+      color: #555;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 1.5em;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a href="/scientist/dashboard" class="back-link">← Zurück zum Dashboard</a>
+
+  <h1>➕ Neuen Datensatz vorschlagen</h1>
+  <p class="subtitle">Schlagen Sie einen neuen CO2-Datensatz vor. Ihre Eingabe wird vom Administrator geprüft.</p>
+
+  <div class="info-box">
+    <div class="info-box-title">ℹ️ Hinweis</div>
+    <div class="info-box-text">
+      Ihr Vorschlag wird zunächst gespeichert und muss vom Administrator genehmigt werden,
+      bevor er in die Datenbank übernommen wird. Bitte geben Sie eine aussagekräftige
+      Begründung für Ihren Vorschlag an.
+    </div>
+  </div>
+
+  <form th:action="@{/scientist/new}" method="post">
+    <div class="form-group">
+      <label for="country">Land <span class="required">*</span></label>
+      <select id="country" name="country" required>
+        <option value="">-- Bitte wählen --</option>
+        <option th:each="c : ${countries}" th:value="${c}" th:text="${c}"></option>
+      </select>
+      <div class="helper-text">Wählen Sie das Land für den neuen Datensatz</div>
+    </div>
+
+    <div class="form-group">
+      <label for="year">Jahr <span class="required">*</span></label>
+      <input type="number" id="year" name="year" min="1900" max="2100" required>
+      <div class="helper-text">Geben Sie das Jahr ein (z.B. 2023)</div>
+    </div>
+
+    <div class="form-group">
+      <label for="co2">CO2-Emission (in Tonnen) <span class="required">*</span></label>
+      <input type="number" id="co2" name="co2" step="0.01" min="0" required>
+      <div class="helper-text">Geben Sie den CO2-Wert in Tonnen ein (z.B. 1234.56)</div>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Datenstatus <span class="required">*</span></label>
+      <select id="status" name="status" required>
+        <option value="">-- Bitte wählen --</option>
+        <option th:each="s : ${dataStatuses}" th:value="${s}" th:text="${s}"></option>
+      </select>
+      <div class="helper-text">
+        VERIFIED = Verifizierte Daten | ESTIMATED = Geschätzte Daten | PENDING = Ausstehend
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="reason">Begründung <span class="required">*</span></label>
+      <textarea id="reason" name="reason" required
+                placeholder="Bitte erklären Sie, woher die Daten stammen und warum dieser Datensatz hinzugefügt werden sollte..."></textarea>
+      <div class="helper-text">
+        Eine aussagekräftige Begründung erhöht die Chance auf Genehmigung
+      </div>
+    </div>
+
+    <div class="button-group">
+      <a href="/scientist/dashboard" class="btn btn-secondary">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Vorschlag einreichen</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>ml>

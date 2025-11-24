@@ -4,14 +4,10 @@ import de.example.likeherotozero.model.Co2Record;
 import de.example.likeherotozero.repository.Co2RecordRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import de.example.likeherotozero.model.DataStatus;
 
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/co2")

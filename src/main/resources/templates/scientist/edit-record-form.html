@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datensatz korrigieren</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      color: #764ba2;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+
+    .comparison-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .current-data,
+    .new-data {
+      padding: 20px;
+      border-radius: 8px;
+      border: 2px solid;
+    }
+
+    .current-data {
+      background: #fff3e0;
+      border-color: #FF9800;
+    }
+
+    .new-data {
+      background: #e8f5e9;
+      border-color: #4CAF50;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .current-data .section-title {
+      color: #F57C00;
+    }
+
+    .new-data .section-title {
+      color: #2e7d32;
+    }
+
+    .data-item {
+      margin-bottom: 10px;
+    }
+
+    .data-label {
+      font-weight: 600;
+      color: #555;
+      font-size: 0.9em;
+    }
+
+    .data-value {
+      font-size: 1.1em;
+      color: #333;
+      margin-top: 3px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+      font-size: 1em;
+    }
+
+    .required {
+      color: #f44336;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .helper-text {
+      font-size: 0.9em;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 14px 30px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+      flex: 1;
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 25px;
+    }
+
+    .info-box-title {
+      font-weight: 600;
+      color: #1976D2;
+      margin-bottom: 8px;
+    }
+
+    .info-box-text {
+      color: #555;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 1.5em;
+      }
+
+      .comparison-section {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a href="/scientist/dashboard" class="back-link">← Zurück zum Dashboard</a>
+
+  <h1>✏️ Datensatz korrigieren</h1>
+  <p class="subtitle">Schlagen Sie Korrekturen für den bestehenden Datensatz vor</p>
+
+  <div class="info-box">
+    <div class="info-box-title">ℹ️ Hinweis</div>
+    <div class="info-box-text">
+      Sie sehen links die aktuellen Werte und können rechts die neuen Werte eingeben.
+      Ihre Änderungen werden vom Administrator geprüft, bevor sie übernommen werden.
+    </div>
+  </div>
+
+  <!-- Comparison Section -->
+  <div class="comparison-section">
+    <div class="current-data">
+      <div class="section-title">📋 Aktuelle Werte</div>
+      <div class="data-item">
+        <div class="data-label">Land</div>
+        <div class="data-value" th:text="${record.country}"></div>
+      </div>
+      <div class="data-item">
+        <div class="data-label">Jahr</div>
+        <div class="data-value" th:text="${record.year}"></div>
+      </div>
+      <div class="data-item">
+        <div class="data-label">CO2-Emission</div>
+        <div class="data-value" th:text="${#numbers.formatDecimal(record.co2, 1, 2)} + ' t'"></div>
+      </div>
+      <div class="data-item">
+        <div class="data-label">Status</div>
+        <div class="data-value" th:text="${record.status}"></div>
+      </div>
+    </div>
+
+    <div class="new-data">
+      <div class="section-title">✨ Neue Werte (Ihre Eingabe)</div>
+      <div style="color: #666; font-style: italic; padding: 20px 0;">
+        Bitte füllen Sie das Formular unten aus
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Form -->
+  <form th:action="@{/scientist/edit/submit}" method="post">
+    <input type="hidden" name="recordId" th:value="${record.id}">
+
+    <div class="form-group">
+      <label for="country">Land <span class="required">*</span></label>
+      <input type="text" id="country" name="country" th:value="${record.country}" required>
+      <div class="helper-text">Ändern Sie das Land, falls notwendig</div>
+    </div>
+
+    <div class="form-group">
+      <label for="year">Jahr <span class="required">*</span></label>
+      <input type="number" id="year" name="year" th:value="${record.year}" min="1900" max="2100" required>
+      <div class="helper-text">Korrigieren Sie das Jahr, falls erforderlich</div>
+    </div>
+
+    <div class="form-group">
+      <label for="co2">CO2-Emission (in Tonnen) <span class="required">*</span></label>
+      <input type="number" id="co2" name="co2" th:value="${record.co2}" step="0.01" min="0" required>
+      <div class="helper-text">Geben Sie den korrigierten CO2-Wert ein</div>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Datenstatus <span class="required">*</span></label>
+      <select id="status" name="status" required>
+        <option th:each="s : ${dataStatuses}"
+                th:value="${s}"
+                th:text="${s}"
+                th:selected="${s == record.status}">
+        </option>
+      </select>
+      <div class="helper-text">
+        VERIFIED = Verifizierte Daten | ESTIMATED = Geschätzte Daten | PENDING = Ausstehend
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="reason">Begründung für die Änderung <span class="required">*</span></label>
+      <textarea id="reason" name="reason" required
+                placeholder="Bitte erklären Sie, warum diese Korrektur notwendig ist und woher die neuen Daten stammen..."></textarea>
+      <div class="helper-text">
+        Eine aussagekräftige Begründung erhöht die Chance auf Genehmigung
+      </div>
+    </div>
+
+    <div class="button-group">
+      <a href="/scientist/dashboard" class="btn btn-secondary">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Korrektur einreichen</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>

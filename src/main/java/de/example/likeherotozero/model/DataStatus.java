@@ -1,7 +1,7 @@
 package de.example.likeherotozero.model;
 
 public enum DataStatus {
-    PENDING,
-    APPROVED,
-    REJECTED;
+    APPROVED,   // Verifizierte Daten
+    PENDING,    // Ausstehend
+    ESTIMATED   // Geschätzte Daten
 }
