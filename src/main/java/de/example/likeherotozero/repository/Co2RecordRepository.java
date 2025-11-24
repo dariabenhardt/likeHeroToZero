@@ -2,8 +2,18 @@ package de.example.likeherotozero.repository;
 
 import de.example.likeherotozero.model.Co2Record;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+import java.util.List;
+
+@Repository
 public interface Co2RecordRepository extends JpaRepository<Co2Record, Long>{
-    Optional<Co2Record> findTopByCountryOrderByYearDesc(String country);
+    List<Co2Record> findAllByCountry(String country);
+
+    @Query("SELECT DISTINCT c.country FROM Co2Record c")
+    List<String> findAllCountries();
+
+    Co2Record findTopByCountryOrderByYearDesc(String country);
 }
