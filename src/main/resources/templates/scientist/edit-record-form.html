@@ -303,20 +303,6 @@
     </div>
 
     <div class="form-group">
-      <label for="status">Datenstatus <span class="required">*</span></label>
-      <select id="status" name="status" required>
-        <option th:each="s : ${dataStatuses}"
-                th:value="${s}"
-                th:text="${s}"
-                th:selected="${s == record.status}">
-        </option>
-      </select>
-      <div class="helper-text">
-        VERIFIED = Verifizierte Daten | ESTIMATED = Geschätzte Daten | PENDING = Ausstehend
-      </div>
-    </div>
-
-    <div class="form-group">
       <label for="reason">Begründung für die Änderung <span class="required">*</span></label>
       <textarea id="reason" name="reason" required
                 placeholder="Bitte erklären Sie, warum diese Korrektur notwendig ist und woher die neuen Daten stammen..."></textarea>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrator Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      color: #667eea;
+      font-size: 2em;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .username {
+      color: #666;
+      font-weight: 600;
+    }
+
+    .logout-btn {
+      padding: 10px 20px;
+      background: #ff5252;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: #ff1744;
+      transform: translateY(-2px);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .stat-icon {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #666;
+      font-weight: 600;
+    }
+
+    .pending-changes {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .pending-changes h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+
+    .changes-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .changes-table th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .changes-table td {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .changes-table tr:hover {
+      background: #f5f5f5;
+    }
+
+    .type-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .type-NEU {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .type-UPDATE {
+      background-color: #FF9800;
+      color: white;
+    }
+
+    .type-DELETE {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-review {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9em;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-review:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .no-changes {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-style: italic;
+    }
+
+    .alert {
+      padding: 15px 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .reason-preview {
+      max-width: 300px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .changes-table {
+        font-size: 0.9em;
+      }
+
+      .changes-table th,
+      .changes-table td {
+        padding: 10px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>👨‍💼 Administrator Dashboard</h1>
+      <p class="username">Angemeldet als: <strong th:text="${username}">Admin</strong></p>
+    </div>
+    <div class="user-info">
+      <a href="/" class="logout-btn">🏠 Startseite</a>
+      <a href="/login/logout" class="logout-btn">Abmelden</a>
+    </div>
+  </div>
+
+  <!-- Success/Error Messages -->
+  <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+  <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+  <!-- Statistics -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-number" th:text="${#lists.size(pendingChanges)}">0</div>
+      <div class="stat-label">Ausstehende Änderungen</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">➕</div>
+      <div class="stat-number"
+           th:text="${#aggregates.sum(pendingChanges.![changeType.name() == 'NEU' ? 1 : 0])}">0</div>
+      <div class="stat-label">Neue Datensätze (NEU)</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">✏️</div>
+      <div class="stat-number"
+           th:text="${#aggregates.sum(pendingChanges.![changeType.name() == 'UPDATE' ? 1 : 0])}">0</div>
+      <div class="stat-label">Korrekturen (UPDATE)</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🗑️</div>
+      <div class="stat-number"
+           th:text="${#aggregates.sum(pendingChanges.![changeType.name() == 'DELETE' ? 1 : 0])}">0</div>
+      <div class="stat-label">Löschungen (DELETE)</div>
+    </div>
+  </div>
+
+  <!-- Pending Changes Table -->
+  <div class="pending-changes">
+    <h2>📋 Ausstehende Änderungen</h2>
+
+    <div th:if="${#lists.isEmpty(pendingChanges)}" class="no-changes">
+      Keine ausstehenden Änderungen vorhanden. 🎉
+    </div>
+
+    <table th:if="${!#lists.isEmpty(pendingChanges)}" class="changes-table">
+      <thead>
+      <tr>
+        <th>Typ</th>
+        <th>Land</th>
+        <th>Jahr</th>
+        <th>CO2-Wert</th>
+        <th>Eingereicht von</th>
+        <th>Eingereicht am</th>
+        <th>Begründung</th>
+        <th>Aktionen</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="change : ${pendingChanges}">
+        <td>
+                    <span class="type-badge"
+                          th:classappend="${'type-' + change.changeType.name()}"
+                          th:text="${change.changeType.name()}">
+                    </span>
+        </td>
+        <td th:text="${change.country != null ? change.country : '-'}">-</td>
+        <td th:text="${change.year != null ? change.year : '-'}">-</td>
+        <td th:text="${change.co2 != null ? (#numbers.formatDecimal(change.co2, 1, 2) + ' t') : '-'}">-</td>
+        <td th:text="${change.submittedBy != null ? change.submittedBy : 'Unbekannt'}">-</td>
+        <td th:text="${change.submittedAt != null ? #temporals.format(change.submittedAt, 'dd.MM.yyyy HH:mm') : '-'}">-</td>
+        <td>
+          <div class="reason-preview"
+               th:text="${change.changeReason != null ? change.changeReason : 'Keine Angabe'}"
+               th:title="${change.changeReason}">-</div>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <a th:href="@{/admin/review/{id}(id=${change.id})}" class="btn-review">
+              👁️ Prüfen
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>
