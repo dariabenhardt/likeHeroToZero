@@ -169,7 +169,7 @@
 
   <form th:action="@{/co2/country}" method="post">
     <div class="form-group">
-      <label for="country">Wählen Sie ein Land:</label>
+      <label for="country">Wählen Sie ein Land aus:</label>
       <select id="country" name="country" required>
         <option value="">-- Bitte wählen --</option>
         <option th:each="c : ${countries}"
@@ -204,15 +204,7 @@
         <div class="result-value co2-value" th:text="${#numbers.formatDecimal(record.co2, 1, 2)} + ' t'"></div>
       </div>
 
-      <div class="result-item">
-        <div class="result-label">Status</div>
-        <div>
-                        <span class="status-badge"
-                              th:classappend="${'status-' + record.status}"
-                              th:text="${record.status}">
-                        </span>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>

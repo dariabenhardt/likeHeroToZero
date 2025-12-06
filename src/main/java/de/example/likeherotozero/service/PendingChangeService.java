@@ -78,12 +78,12 @@ public class PendingChangeService {
 
         // Je nach Typ die Aktion ausführen
         if (change.getChangeType() == ChangeType.NEW) {
-            // Neuen Datensatz erstellen
+            // Neuen Datensatz estellen
             Co2Record newRecord = new Co2Record(
                     change.getCountry(),
                     change.getYear(),
                     change.getCo2(),
-                    change.getDataStatus()  // GEÄNDERT: getDataStatus statt getStatus
+                    change.getDataStatus()
             );
             co2RecordRepository.save(newRecord);
 
@@ -96,7 +96,7 @@ public class PendingChangeService {
                 record.setCountry(change.getCountry());
                 record.setYear(change.getYear());
                 record.setCo2(change.getCo2());
-                record.setStatus(change.getDataStatus());  // GEÄNDERT: getDataStatus
+                record.setStatus(change.getDataStatus());
                 co2RecordRepository.save(record);
             }
         }
